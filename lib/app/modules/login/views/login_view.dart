@@ -186,7 +186,7 @@ class LoginView extends GetView<LoginController> {
                   minimumSize: const Size(double.infinity, 43),
                   backgroundColor: green,
                 ),
-                onPressed: () {},
+                onPressed: () => controller.validateAndLogin(),
                 child: const Text(
                   'Sign In',
                   style: TextStyle(

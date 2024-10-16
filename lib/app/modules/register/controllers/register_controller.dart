@@ -17,7 +17,6 @@ class RegisterController extends GetxController {
   final TextEditingController confirmpassC = TextEditingController();
 
   var isNameValid = true.obs;
-  var isUsernameValid = true.obs;
   var isEmailValid = true.obs;
   var isPassValid = true.obs;
   var isCPassValid = true.obs;
@@ -25,7 +24,6 @@ class RegisterController extends GetxController {
   var isConfirmObscure = true.obs;
 
   var nameError = RxnString();
-  var usernameError = RxnString();
   var emailError = RxnString();
   var passwordError = RxnString();
   var passwordConfirmError = RxnString();
@@ -44,23 +42,6 @@ class RegisterController extends GetxController {
     } else {
       nameError.value = null;
       isNameValid.value = true;
-    }
-  }
-
-  void validateUsername() {
-    String username = usernameC.text;
-    if (username.isEmpty) {
-      usernameError.value = 'Username cannot be empty!';
-      isUsernameValid.value = false;
-    } else if (username.length < 3 || username.length > 15) {
-      usernameError.value = 'Username must be between 3 and 15 characters!';
-      isUsernameValid.value = false;
-    } else if (!RegExp(r'^[a-z0-9_]+$').hasMatch(username)) {
-      isUsernameValid.value = false;
-      usernameError.value = "Only lowercase letters, numbers, and underscores!";
-    } else {
-      usernameError.value = null;
-      isUsernameValid.value = true;
     }
   }
 
@@ -114,9 +95,6 @@ class RegisterController extends GetxController {
     nameC.addListener(() {
       validateName();
     });
-    usernameC.addListener(() {
-      validateUsername();
-    });
     emailC.addListener(() {
       validateEmail();
     });
@@ -140,13 +118,11 @@ class RegisterController extends GetxController {
 
   void validateAndRegister() {
     isNameValid.value = nameC.text.isNotEmpty;
-    isUsernameValid.value = usernameC.text.isNotEmpty;
     isEmailValid.value = emailC.text.isNotEmpty;
     isPassValid.value = passC.text.isNotEmpty && passC.text.length >= 8;
     isCPassValid.value = confirmpassC.text == passC.text;
 
     if (!isNameValid.value ||
-        !isUsernameValid.value ||
         !isEmailValid.value ||
         !isPassValid.value ||
         !isCPassValid.value) {
@@ -160,13 +136,15 @@ class RegisterController extends GetxController {
         emailC.text,
         passC.text,
         nameC.text,
-        usernameC.text,
       );
     }
   }
 
   void registerAuth(
-      String email, String password, String name, String username) async {
+    String email,
+    String password,
+    String name,
+  ) async {
     loading();
 
     try {
@@ -180,7 +158,7 @@ class RegisterController extends GetxController {
       Get.back();
       customDialog(userCredential.user!.email, true, null);
       if (auth.currentUser != null) {
-        checkEmailVerified(userCredential.user!, name, username);
+        checkEmailVerified(userCredential.user!, name);
       }
     } on FirebaseAuthException catch (e) {
       Get.back();
@@ -189,7 +167,7 @@ class RegisterController extends GetxController {
     }
   }
 
-  void checkEmailVerified(User user, String name, String username) async {
+  void checkEmailVerified(User user, String name) async {
     User? user = FirebaseAuth.instance.currentUser;
     while (user != null && !user.emailVerified) {
       await Future.delayed(const Duration(seconds: 3));
@@ -204,7 +182,6 @@ class RegisterController extends GetxController {
       await FirebaseFirestore.instance.collection('users').doc(uid).set({
         'email': user.email,
         'name': name,
-        'username': username,
         'createdAt': FieldValue.serverTimestamp(),
       });
       Get.back();
@@ -218,7 +195,7 @@ class RegisterController extends GetxController {
       Get.back();
     }
 
-    final String title = isSuccess ? "Almost There!" : "Oops!";
+    final String title = isSuccess ? "Verify your email!" : "Oops!";
     final String dialogContent = isSuccess
         ? 'Thanks for signing up with us! 🎉 To get started, we just need you to verify your email address $email.'
         : content ??
@@ -266,9 +243,11 @@ class RegisterController extends GetxController {
           TextButton(
             onPressed: () async {
               if (auth.currentUser != null) {
+                loading();
                 await auth.currentUser!.delete();
                 Get.back();
               }
+              Get.back();
             },
             child: Text(
               buttonContent,
@@ -301,17 +280,15 @@ class RegisterController extends GetxController {
   }
 
   String _getErrorMessage(String errorCode) {
-    switch (errorCode) {
-      case 'email-already-in-use':
-        return 'This email is already taken. Please try a different one.';
-      case 'weak-password':
-        return 'The password is too weak. Please choose a stronger password.';
-      case 'invalid-email':
-        return 'The email address is not valid. Please enter a correct email.';
-      case 'operation-not-allowed':
-        return 'This operation is not allowed. Please contact support.';
-      default:
-        return 'An unexpected error occurred. Please try again.';
-    }
+    final errorMessages = {
+      'invalid-credential': 'Incorrect email or password.',
+      'channel-error': 'Please fill in all the details!',
+      'wrong-password': 'Oops, wrong password.',
+      'invalid-email': 'Invalid email address.',
+      'weak-password': 'Your password is too weak.',
+      'email-already-in-use': 'This email is already in use.',
+      'The email address is badly formatted': 'The email format looks off.'
+    };
+    return errorMessages[errorCode] ?? 'Something went wrong: $errorCode';
   }
 }

@@ -18,7 +18,7 @@ class RegisterView extends GetView<RegisterController> {
           child: Column(
             children: [
               const Padding(
-                padding: EdgeInsets.only(top: 139.0),
+                padding: EdgeInsets.only(top: 197.0),
                 child: Text(
                   'Join FlavorLab and unlock a world of delicious recipes!',
                   style: TextStyle(
@@ -94,72 +94,6 @@ class RegisterView extends GetView<RegisterController> {
                   },
                 ),
               ),
-              const SizedBox(
-                height: 15,
-              ),
-              Obx(() => TextField(
-                    controller: controller.usernameC,
-                    cursorColor: grey,
-                    maxLength: 15,
-                    buildCounter: (BuildContext context,
-                        {int? currentLength,
-                        required int? maxLength,
-                        required bool isFocused}) {
-                      return null;
-                    },
-                    style: const TextStyle(
-                      color: grey,
-                      fontSize: 16,
-                      fontFamily: 'myfont',
-                    ),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: white),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: white),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: Colors.red, width: 1.5),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: Colors.red, width: 1.5),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      hintText: 'Username',
-                      hintStyle: const TextStyle(
-                        color: grey,
-                        fontFamily: 'myfont',
-                        fontSize: 16,
-                      ),
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.only(left: 9.0, right: 9.0),
-                        child: Image.asset(
-                          'assets/icons/username.png',
-                          height: 24,
-                          width: 24,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      contentPadding:
-                          const EdgeInsets.symmetric(vertical: 10.0),
-                      errorText: controller.usernameError.value,
-                    ),
-                    onChanged: (value) {
-                      controller.validateUsername();
-                    },
-                  )),
               const SizedBox(
                 height: 15,
               ),
