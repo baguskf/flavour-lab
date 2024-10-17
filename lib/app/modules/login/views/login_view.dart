@@ -2,6 +2,7 @@ import 'package:flavour_lab/app/colors/colors.dart';
 import 'package:flavour_lab/app/routes/app_pages.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 
@@ -14,7 +15,7 @@ class LoginView extends GetView<LoginController> {
     return Scaffold(
       backgroundColor: primary,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28.0),
+        padding: const EdgeInsets.symmetric(horizontal: 40.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -41,6 +42,7 @@ class LoginView extends GetView<LoginController> {
               ),
               Obx(() => TextField(
                     controller: controller.emailC,
+                    keyboardType: TextInputType.emailAddress,
                     cursorColor: grey,
                     style: const TextStyle(
                       color: grey,
@@ -80,8 +82,8 @@ class LoginView extends GetView<LoginController> {
                       ),
                       prefixIcon: Padding(
                         padding: const EdgeInsets.only(left: 9.0, right: 9.0),
-                        child: Image.asset(
-                          'assets/icons/mage_email.png',
+                        child: SvgPicture.asset(
+                          'assets/icons/email.svg',
                           height: 24,
                           width: 24,
                           fit: BoxFit.contain,
@@ -100,6 +102,7 @@ class LoginView extends GetView<LoginController> {
               ),
               Obx(() => TextField(
                     obscureText: controller.isObscure.value,
+                    keyboardType: TextInputType.visiblePassword,
                     controller: controller.passC,
                     cursorColor: grey,
                     style: const TextStyle(
@@ -140,8 +143,8 @@ class LoginView extends GetView<LoginController> {
                       ),
                       prefixIcon: Padding(
                         padding: const EdgeInsets.only(left: 9.0, right: 9.0),
-                        child: Image.asset(
-                          'assets/icons/password.png',
+                        child: SvgPicture.asset(
+                          'assets/icons/password.svg',
                           height: 24,
                           width: 24,
                           fit: BoxFit.contain,
@@ -167,7 +170,7 @@ class LoginView extends GetView<LoginController> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () => controller.resetDialog(),
                   child: const Text(
                     'Forgot Password?',
                     style: TextStyle(
@@ -197,7 +200,7 @@ class LoginView extends GetView<LoginController> {
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 15,
               ),
               RichText(
                 textAlign: TextAlign.center,

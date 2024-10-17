@@ -1,6 +1,7 @@
 import 'package:flavour_lab/app/colors/colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 
@@ -13,7 +14,7 @@ class RegisterView extends GetView<RegisterController> {
     return Scaffold(
       backgroundColor: primary,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28.0),
+        padding: const EdgeInsets.symmetric(horizontal: 40.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -79,8 +80,8 @@ class RegisterView extends GetView<RegisterController> {
                     ),
                     prefixIcon: Padding(
                       padding: const EdgeInsets.only(left: 9.0, right: 9.0),
-                      child: Image.asset(
-                        'assets/icons/person.png',
+                      child: SvgPicture.asset(
+                        'assets/icons/person.svg',
                         height: 24,
                         width: 24,
                         fit: BoxFit.contain,
@@ -99,6 +100,7 @@ class RegisterView extends GetView<RegisterController> {
               ),
               Obx(() => TextField(
                     controller: controller.emailC,
+                    keyboardType: TextInputType.emailAddress,
                     cursorColor: grey,
                     style: const TextStyle(
                       color: grey,
@@ -138,8 +140,8 @@ class RegisterView extends GetView<RegisterController> {
                       ),
                       prefixIcon: Padding(
                         padding: const EdgeInsets.only(left: 9.0, right: 9.0),
-                        child: Image.asset(
-                          'assets/icons/mage_email.png',
+                        child: SvgPicture.asset(
+                          'assets/icons/email.svg',
                           height: 24,
                           width: 24,
                           fit: BoxFit.contain,
@@ -159,6 +161,7 @@ class RegisterView extends GetView<RegisterController> {
               Obx(
                 () => TextField(
                   obscureText: controller.isObscure.value,
+                  keyboardType: TextInputType.visiblePassword,
                   controller: controller.passC,
                   cursorColor: grey,
                   style: const TextStyle(
@@ -199,8 +202,8 @@ class RegisterView extends GetView<RegisterController> {
                     ),
                     prefixIcon: Padding(
                       padding: const EdgeInsets.only(left: 9.0, right: 9.0),
-                      child: Image.asset(
-                        'assets/icons/password.png',
+                      child: SvgPicture.asset(
+                        'assets/icons/password.svg',
                         height: 24,
                         width: 24,
                         fit: BoxFit.contain,
@@ -227,6 +230,7 @@ class RegisterView extends GetView<RegisterController> {
               Obx(
                 () => TextField(
                   obscureText: controller.isConfirmObscure.value,
+                  keyboardType: TextInputType.visiblePassword,
                   controller: controller.confirmpassC,
                   cursorColor: grey,
                   style: const TextStyle(
@@ -267,8 +271,8 @@ class RegisterView extends GetView<RegisterController> {
                     ),
                     prefixIcon: Padding(
                       padding: const EdgeInsets.only(left: 9.0, right: 9.0),
-                      child: Image.asset(
-                        'assets/icons/password.png',
+                      child: SvgPicture.asset(
+                        'assets/icons/password.svg',
                         height: 24,
                         width: 24,
                         fit: BoxFit.contain,

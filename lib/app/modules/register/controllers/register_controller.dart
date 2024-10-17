@@ -9,6 +9,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 
 class RegisterController extends GetxController {
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore data = FirebaseFirestore.instance;
 
   final TextEditingController nameC = TextEditingController();
   final TextEditingController usernameC = TextEditingController();
@@ -179,9 +180,11 @@ class RegisterController extends GetxController {
     loading();
     if (user != null && user.emailVerified) {
       String uid = user.uid;
-      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      await data.collection('users').doc(uid).set({
         'email': user.email,
         'name': name,
+        'date': '-',
+        'phone': '-',
         'createdAt': FieldValue.serverTimestamp(),
       });
       Get.back();
@@ -197,16 +200,17 @@ class RegisterController extends GetxController {
 
     final String title = isSuccess ? "Verify your email!" : "Oops!";
     final String dialogContent = isSuccess
-        ? 'Thanks for signing up with us! 🎉 To get started, we just need you to verify your email address $email.'
+        ? 'Thanks for signing up with us! 🎉 To get started, we just need you to verify your email address $email'
         : content ??
             "Something went wrong. Please check your input and try again.";
     final String buttonContent = isSuccess ? 'Change email' : "Oke";
     final String iconPath =
-        isSuccess ? 'assets/icons/email.png' : 'assets/icons/error.png';
+        isSuccess ? 'assets/images/email.png' : 'assets/images/error.png';
     final Color myColor = isSuccess ? Colors.green : Colors.red;
 
     Get.dialog(
       AlertDialog(
+        backgroundColor: primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),

@@ -1,6 +1,8 @@
 import 'package:flavour_lab/app/colors/colors.dart';
+import 'package:flavour_lab/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 
 import 'package:get/get.dart';
 
@@ -8,6 +10,7 @@ import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,16 +60,300 @@ class ProfileView extends GetView<ProfileController> {
               const SizedBox(
                 height: 15,
               ),
-              const Align(
+              Align(
                 alignment: Alignment.center,
-                child: Text(
-                  'Kang Haerin',
-                  style: TextStyle(
-                    fontFamily: 'myfont',
-                    fontSize: 16,
-                    color: grey,
-                  ),
+                child: Obx(() => Text(
+                      controller.currentUserName.value,
+                      style: const TextStyle(
+                        fontFamily: 'myfont',
+                        fontSize: 20,
+                        color: grey,
+                      ),
+                    )),
+              ),
+              const SizedBox(
+                height: 52,
+              ),
+              const Text(
+                'Personal Infromation',
+                style: TextStyle(
+                  fontFamily: 'myfont',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Row(
+                    children: [
+                      SvgPicture.asset('assets/icons/email.svg'),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Email',
+                        style: TextStyle(
+                          fontFamily: 'myfont',
+                          fontSize: 16,
+                          color: grey,
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  Expanded(
+                    child: Obx(() => Text(
+                          textAlign: TextAlign.end,
+                          controller.currentUserEmail.value,
+                          style: const TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 16,
+                            color: grey,
+                          ),
+                        )),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Row(
+                    children: [
+                      SvgPicture.asset('assets/icons/phone.svg'),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Phone',
+                        style: TextStyle(
+                          fontFamily: 'myfont',
+                          fontSize: 16,
+                          color: grey,
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  Expanded(
+                    child: Obx(() => Text(
+                          textAlign: TextAlign.end,
+                          controller.currentUserPhone.value,
+                          style: const TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 16,
+                            color: grey,
+                          ),
+                        )),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Row(
+                    children: [
+                      SvgPicture.asset('assets/icons/ibirthday.svg'),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Date of birth',
+                        style: TextStyle(
+                          fontFamily: 'myfont',
+                          fontSize: 16,
+                          color: grey,
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  Expanded(
+                    child: Obx(() => Text(
+                          textAlign: TextAlign.end,
+                          controller.currentUserDate.value,
+                          style: const TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 16,
+                            color: grey,
+                          ),
+                        )),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                'Setting',
+                style: TextStyle(
+                  fontFamily: 'myfont',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      SvgPicture.asset('assets/icons/edit_info.svg'),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Edit Personal Infromation',
+                        style: TextStyle(
+                          fontFamily: 'myfont',
+                          fontSize: 16,
+                          color: grey,
+                        ),
+                      )
+                    ],
+                  ),
+                  InkWell(
+                      onTap: () => Get.toNamed(Routes.PERSONAL_INFO),
+                      child: SvgPicture.asset('assets/icons/next.svg')),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      SvgPicture.asset('assets/icons/editpass.svg'),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Change Password',
+                        style: TextStyle(
+                          fontFamily: 'myfont',
+                          fontSize: 16,
+                          color: grey,
+                        ),
+                      )
+                    ],
+                  ),
+                  SvgPicture.asset('assets/icons/next.svg'),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      SvgPicture.asset('assets/icons/mode.svg'),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Theme light/dark',
+                        style: TextStyle(
+                          fontFamily: 'myfont',
+                          fontSize: 16,
+                          color: grey,
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  Obx(
+                    () => FlutterSwitch(
+                      width: 35.0,
+                      activeColor: green,
+                      height: 21.0,
+                      toggleSize: 10.0,
+                      value: controller.isDarkMode.value,
+                      borderRadius: 30.0,
+                      onToggle: (bool isDark) {
+                        controller.toggleDarkMode(isDark);
+                      },
+                      padding: 5.0,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      SvgPicture.asset('assets/icons/about.svg'),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'About',
+                        style: TextStyle(
+                          fontFamily: 'myfont',
+                          fontSize: 16,
+                          color: grey,
+                        ),
+                      )
+                    ],
+                  ),
+                  SvgPicture.asset('assets/icons/next.svg'),
+                ],
+              ),
+              const SizedBox(
+                height: 76,
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      minimumSize: const Size(107, 43),
+                      backgroundColor: green,
+                    ),
+                    onPressed: () => controller.logout(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset('assets/icons/signout.svg'),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          'Sign out',
+                          style: TextStyle(
+                              fontFamily: 'myfont',
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        )
+                      ],
+                    )),
               )
             ],
           ),

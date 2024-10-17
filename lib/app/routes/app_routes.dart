@@ -12,6 +12,7 @@ abstract class Routes {
   static const HOME_CONTENT = _Paths.HOME_CONTENT;
   static const PROFILE = _Paths.PROFILE;
   static const FAVORITE = _Paths.FAVORITE;
+  static const PERSONAL_INFO = _Paths.PERSONAL_INFO;
 }
 
 abstract class _Paths {
@@ -23,4 +24,5 @@ abstract class _Paths {
   static const HOME_CONTENT = '/home-content';
   static const PROFILE = '/profile';
   static const FAVORITE = '/favorite';
+  static const PERSONAL_INFO = '/personal-info';
 }
