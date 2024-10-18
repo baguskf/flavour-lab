@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:flavour_lab/app/colors/colors.dart';
 import 'package:flavour_lab/app/routes/app_pages.dart';
+import 'package:flavour_lab/app/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loading_indicator/loading_indicator.dart';
 
 class RegisterController extends GetxController {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -128,9 +127,10 @@ class RegisterController extends GetxController {
         !isPassValid.value ||
         !isCPassValid.value) {
       customDialog(
-        null,
-        false,
-        null,
+        title: "Oops!",
+        email: null,
+        isSuccess: false,
+        content: null,
       );
     } else {
       registerAuth(
@@ -146,7 +146,7 @@ class RegisterController extends GetxController {
     String password,
     String name,
   ) async {
-    loading();
+    showLoading();
 
     try {
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
@@ -157,14 +157,25 @@ class RegisterController extends GetxController {
       await userCredential.user!.sendEmailVerification();
 
       Get.back();
-      customDialog(userCredential.user!.email, true, null);
+      customDialog(
+        title: "Verify your email!",
+        email: userCredential.user!.email,
+        isSuccess: true,
+        content: null,
+      );
+
       if (auth.currentUser != null) {
         checkEmailVerified(userCredential.user!, name);
       }
     } on FirebaseAuthException catch (e) {
       Get.back();
-      String errorMessage = _getErrorMessage(e.code);
-      customDialog(null, false, errorMessage);
+      String errorMessage = getErrorMessage(e.code);
+      customDialog(
+        title: "Oops!",
+        email: null,
+        isSuccess: false,
+        content: errorMessage,
+      );
     }
   }
 
@@ -177,7 +188,7 @@ class RegisterController extends GetxController {
     }
 
     Get.back();
-    loading();
+    showLoading();
     if (user != null && user.emailVerified) {
       String uid = user.uid;
       await data.collection('users').doc(uid).set({
@@ -191,108 +202,5 @@ class RegisterController extends GetxController {
       await auth.signOut();
       Get.offAllNamed(Routes.LOGIN);
     }
-  }
-
-  void customDialog(String? email, bool isSuccess, String? content) {
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
-
-    final String title = isSuccess ? "Verify your email!" : "Oops!";
-    final String dialogContent = isSuccess
-        ? 'Thanks for signing up with us! 🎉 To get started, we just need you to verify your email address $email'
-        : content ??
-            "Something went wrong. Please check your input and try again.";
-    final String buttonContent = isSuccess ? 'Change email' : "Oke";
-    final String iconPath =
-        isSuccess ? 'assets/images/email.png' : 'assets/images/error.png';
-    final Color myColor = isSuccess ? Colors.green : Colors.red;
-
-    Get.dialog(
-      AlertDialog(
-        backgroundColor: primary,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        title: Column(
-          children: [
-            Image.asset(
-              iconPath,
-              height: 100,
-              width: 100,
-            ),
-            const SizedBox(height: 25),
-            Text(
-              textAlign: TextAlign.center,
-              title,
-              style: TextStyle(
-                fontSize: 30,
-                color: myColor,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'myfont',
-              ),
-            ),
-            const SizedBox(height: 15),
-            Text(
-              dialogContent,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 15,
-                fontFamily: 'myfont',
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              if (auth.currentUser != null) {
-                loading();
-                await auth.currentUser!.delete();
-                Get.back();
-              }
-              Get.back();
-            },
-            child: Text(
-              buttonContent,
-              style: TextStyle(color: myColor, fontFamily: 'myfont'),
-            ),
-          ),
-        ],
-      ),
-      barrierDismissible: false,
-    );
-  }
-
-  void loading() {
-    Get.dialog(
-      const Center(
-        child: SizedBox(
-          width: 100,
-          height: 100,
-          child: LoadingIndicator(
-            indicatorType: Indicator.ballSpinFadeLoader,
-            colors: [green],
-            strokeWidth: 2,
-            backgroundColor: Colors.transparent,
-            pathBackgroundColor: Colors.transparent,
-          ),
-        ),
-      ),
-      barrierDismissible: false,
-    );
-  }
-
-  String _getErrorMessage(String errorCode) {
-    final errorMessages = {
-      'invalid-credential': 'Incorrect email or password.',
-      'channel-error': 'Please fill in all the details!',
-      'wrong-password': 'Oops, wrong password.',
-      'invalid-email': 'Invalid email address.',
-      'weak-password': 'Your password is too weak.',
-      'email-already-in-use': 'This email is already in use.',
-      'The email address is badly formatted': 'The email format looks off.'
-    };
-    return errorMessages[errorCode] ?? 'Something went wrong: $errorCode';
   }
 }
